@@ -2,14 +2,13 @@ const buyer = require('express').Router();
 const auth = require('../middleware/auth');
 const User = require('../models/user');
 const Catalog = require('../models/catalog');
-const Prder = require('../models/order');
+const Order = require('../models/order');
 
 buyer.get('/list-of-sellers', auth, async (req, res) => {
     
     try {
-        const { username } = req.user;
         const sellers = await User.find({ user_type : 'seller' });
-        res.status(200).json(sellers);
+        res.status(200).send(sellers);
     } catch (err) {
         res.status(400).send(err);
     }
@@ -44,3 +43,5 @@ buyer.post('/create-order/:seller_id', auth, async (req, res) => {
         res.status(400).send(err);
     }
 });
+
+module.exports = buyer;

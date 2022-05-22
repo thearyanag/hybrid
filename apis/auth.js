@@ -72,3 +72,5 @@ auth.post('/login', async (req,res) => {
         res.status(400).send(err);
     }
 });
+
+module.exports = auth;
