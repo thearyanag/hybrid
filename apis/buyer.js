@@ -32,7 +32,7 @@ buyer.post('/create-order/:seller_id', auth, async (req, res) => {
         const { products } = req.body;
 
         const order = new Order({
-            buyer_id: req.user.username,
+            buyer_id: req.body.username,
             seller_id: username,
             products
         });

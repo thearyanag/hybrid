@@ -7,8 +7,16 @@ const Order = require('../models/order');
 seller.post('/create-catalog', auth, async (req, res) => {
     try {
         const { products } = req.body;
-        const { username } = req.user;
-        const user = await User.findOne({ username });
+        const {username}  = req.body;
+ 
+        const user = await User.findOne({ 'username' : username } , function(err,doc){
+            if(err){
+                console.log(err);
+                }
+            else{
+                console.log(doc);
+            }
+        }).clone();
         const catalog = new Catalog({
             seller_id: user.username,
             products
@@ -22,7 +30,7 @@ seller.post('/create-catalog', auth, async (req, res) => {
 
 seller.get('/orders', auth, async (req, res) => {
     try {
-        const { username } = req.user;
+        const { username } = req.body;
         const orders = await Order.find({ seller_id: username });
         res.status(200).json(orders);
     } catch (err) {
