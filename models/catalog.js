@@ -19,4 +19,4 @@ const Catalog = new Schema({
 }]
 });
 
-module.exports = Catalog;
+module.exports = mongoose.model('Catalog', Catalog);

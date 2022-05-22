@@ -8,6 +8,7 @@ const User = new Schema({
     },
     auth_Token : {
         type: String,
+        default: null,
     },
     user_type : {
         type: String, // can be 'buyer' or 'seller'
@@ -19,4 +20,4 @@ const User = new Schema({
     }
 });
 
-module.exports = User;
+module.exports = mongoose.model('User', User);

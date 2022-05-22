@@ -1,6 +1,8 @@
 const auth = require('express').Router();
 const User = require('../models/user');
 const dotenv = require('dotenv').config();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 auth.post('/register' , async (req,res) => {
 
@@ -23,13 +25,18 @@ auth.post('/register' , async (req,res) => {
 
         encryptedUserPassword = await bcrypt.hash(password, 10);
 
-        const user = new User({ username, password: encryptedUserPassword, user_type });
+        token = jwt.sign( {_id : username}, process.env.JWT_SECRET, { expiresIn: '5h' });
 
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const user = new User({ 'username' : username, 'password': encryptedUserPassword, 'user_type' : user_type , 'auth_Token' : token});
 
-        user.token = token;
-
-        res.status(200).json(user);
+        await user.save(function (err,doc) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.status(200).send(doc);
+            }
+        });
 
     } catch (err) {
         res.status(400).send(err);
@@ -62,7 +69,7 @@ auth.post('/login', async (req,res) => {
             });
         }
 
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({_id : user.username}, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         user.token = token;
 
