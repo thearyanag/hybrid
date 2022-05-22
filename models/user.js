@@ -10,7 +10,7 @@ const User = new Schema({
         type: String,
     },
     user_type : {
-        type: String,
+        type: String, // can be 'buyer' or 'seller'
         required: true,
     },
     password : {
